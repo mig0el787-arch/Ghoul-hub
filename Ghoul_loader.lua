@@ -1,96 +1,42 @@
--- GHOUL HUB | Emo Coquette Style
--- Sidebar: Branco + Roxo
--- Música emo ativada
--- Brookhaven RP
+-- Ghoul Hub Loader (Mobile Safe)
+
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local Humanoid = Character:WaitForChild("Humanoid")
 
--- ================= UI =================
-local Library = loadstring(game:HttpGet(
-"https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"
-))()
-
-local Window = Library.CreateLib("GHOUL HUB ☾ EMO", {
-    MainColor = Color3.fromRGB(255,255,255), -- branco
-    SecondaryColor = Color3.fromRGB(160,70,255), -- roxo
-    TextColor = Color3.fromRGB(20,20,20)
-})
-
--- ================= MUSIC =================
-local Sound = Instance.new("Sound", workspace)
-Sound.SoundId = "rbxassetid://74356605425526" -- música emo
-Sound.Volume = 2
-Sound.Looped = true
-Sound:Play()
-
--- ================= FUN =================
-local FunTab = Window:NewTab("Fun")
-local Fun = FunTab:NewSection("Player")
-
-Fun:NewSlider("Speed Player", "Velocidade", 200, 16, function(v)
-    Humanoid.WalkSpeed = v
+-- Música de entrada
+pcall(function()
+	local sound = Instance.new("Sound")
+	sound.SoundId = "rbxassetid://74356605425526" -- seu ID
+	sound.Volume = 2
+	sound.Looped = true
+	sound.Parent = game:GetService("SoundService")
+	sound:Play()
 end)
 
-Fun:NewSlider("Jump Power", "Pulo", 200, 50, function(v)
-    Humanoid.JumpPower = v
-end)
+-- UI simples (teste)
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "GhoulHub"
 
-Fun:NewSlider("Gravity", "Gravidade", 400, 196, function(v)
-    workspace.Gravity = v
-end)
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.fromScale(0.5,0.5)
+frame.Position = UDim2.fromScale(0.25,0.25)
+frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+frame.BorderSizePixel = 0
+frame.Visible = true
 
-Fun:NewToggle("Infinite Jump", "Pulo infinito", function(state)
-    _G.InfJump = state
-end)
+local uicorner = Instance.new("UICorner", frame)
+uicorner.CornerRadius = UDim.new(0,16)
 
-game:GetService("UserInputService").JumpRequest:Connect(function()
-    if _G.InfJump then
-        Humanoid:ChangeState("Jumping")
-    end
-end)
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1,0,0,40)
+title.BackgroundTransparency = 1
+title.Text = "GHOUL HUB 💜"
+title.TextColor3 = Color3.fromRGB(170,0,255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
 
--- ================= AVATAR =================
-local AvatarTab = Window:NewTab("Avatar")
-local Avatar = AvatarTab:NewSection("Avatar")
-
-Avatar:NewButton("Invisível", "Ficar invisível", function()
-    for _,v in pairs(Character:GetDescendants()) do
-        if v:IsA("BasePart") then
-            v.Transparency = 1
-        end
-    end
-end)
-
--- ================= CAR =================
-local CarTab = Window:NewTab("Car")
-local Car = CarTab:NewSection("Veículo")
-
-Car:NewButton("Fly Car", "Carro voador", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-end)
-
--- ================= HOUSE =================
-local HouseTab = Window:NewTab("House")
-local House = HouseTab:NewSection("Casa")
-
-House:NewButton("TP para Cofre", "Teleporta pro cofre", function()
-    local cf = workspace:FindFirstChild("Safe", true)
-    if cf then
-        Character:MoveTo(cf.Position)
-    end
-end)
-
--- ================= TOOLS =================
-local ToolsTab = Window:NewTab("Tools")
-local Tools = ToolsTab:NewSection("Extras")
-
-Tools:NewButton("Rejoin", "Entrar de novo", function()
-    game:GetService("TeleportService"):Teleport(game.PlaceId)
-end)
-
-Tools:NewButton("Desligar Música", "Mute", function()
-    Sound:Stop()
-end)
+print("Ghoul Hub carregado com sucesso")

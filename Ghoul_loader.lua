@@ -1,88 +1,122 @@
--- GHOUL HUB LOADER
-if not game:IsLoaded() then game.Loaded:Wait() end
-
+-- GHOUL HUB
 local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
-
--- CONFIG
-local IMAGE_ID = "rbxassetid://13946335235"" -- SUA IMAGEM
-local MUSIC_ID = "rbxassetid://306547398"" -- Heavy Love (parte famosa)
-local LOAD_TIME = 5 -- segundos
+local char = player.Character or player.CharacterAdded:Wait()
+local hrp = char:WaitForChild("HumanoidRootPart")
 
 -- GUI
-local gui = Instance.new("ScreenGui")
-gui.Name = "GhoulLoader"
-gui.IgnoreGuiInset = true
-gui.Parent = player:WaitForChild("PlayerGui")
+local gui = Instance.new("ScreenGui", player.PlayerGui)
+gui.Name = "GhoulHub"
 
--- BACKGROUND
-local bg = Instance.new("Frame", gui)
-bg.Size = UDim2.new(1,0,1,0)
-bg.BackgroundColor3 = Color3.new(0,0,0)
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.new(0, 500, 0, 320)
+main.Position = UDim2.new(0.5,-250,0.5,-160)
+main.BackgroundColor3 = Color3.fromRGB(15,15,15)
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,12)
 
--- IMAGE
-local img = Instance.new("ImageLabel", bg)
-img.Size = UDim2.new(1,0,1,0)
-img.Image = IMAGE_ID
-img.BackgroundTransparency = 1
-img.ScaleType = Enum.ScaleType.Crop
+-- SIDEBAR
+local side = Instance.new("Frame", main)
+side.Size = UDim2.new(0,120,1,0)
+side.BackgroundColor3 = Color3.fromRGB(40,0,60)
 
--- DARK OVERLAY
-local overlay = Instance.new("Frame", bg)
-overlay.Size = UDim2.new(1,0,1,0)
-overlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
-overlay.BackgroundTransparency = 0.35
+local tabs = {}
 
--- LOADING BAR BG
-local barBG = Instance.new("Frame", bg)
-barBG.Size = UDim2.new(0.4,0,0,18)
-barBG.Position = UDim2.new(0.3,0,0.85,0)
-barBG.BackgroundColor3 = Color3.fromRGB(30,30,30)
-Instance.new("UICorner", barBG).CornerRadius = UDim.new(1,0)
+-- CONTENT
+local content = Instance.new("Frame", main)
+content.Position = UDim2.new(0,120,0,0)
+content.Size = UDim2.new(1,-120,1,0)
+content.BackgroundTransparency = 1
 
--- LOADING BAR
-local bar = Instance.new("Frame", barBG)
-bar.Size = UDim2.new(0,0,1,0)
-bar.BackgroundColor3 = Color3.fromRGB(160,0,255)
-Instance.new("UICorner", bar).CornerRadius = UDim.new(1,0)
+-- FUNÇÃO PRA CRIAR ABA
+local function createTab(name, order)
+	local btn = Instance.new("TextButton", side)
+	btn.Size = UDim2.new(1,0,0,45)
+	btn.Position = UDim2.new(0,0,0,(order-1)*50)
+	btn.Text = name
+	btn.TextColor3 = Color3.new(1,1,1)
+	btn.BackgroundColor3 = Color3.fromRGB(60,0,90)
+	btn.Font = Enum.Font.GothamBold
+	btn.TextSize = 14
 
--- TEXT
-local text = Instance.new("TextLabel", bg)
-text.Size = UDim2.new(1,0,0,30)
-text.Position = UDim2.new(0,0,0.82,0)
-text.BackgroundTransparency = 1
-text.Text = "Carregando 0%"
-text.TextColor3 = Color3.new(1,1,1)
-text.Font = Enum.Font.GothamBold
-text.TextSize = 18
+	local frame = Instance.new("Frame", content)
+	frame.Size = UDim2.new(1,0,1,0)
+	frame.Visible = false
+	frame.BackgroundTransparency = 1
 
--- MUSIC
-local sound = Instance.new("Sound", bg)
-sound.SoundId = local MUSIC_ID = "rbxassetid://306547398"
-sound.Volume = 3
-sound.Looped = false
-sound:Play()
+	btn.MouseButton1Click:Connect(function()
+		for _,v in pairs(tabs) do v.Visible = false end
+		frame.Visible = true
+	end)
 
--- LOADING ANIMATION
-local start = tick()
-while tick() - start < LOAD_TIME do
-	local progress = math.clamp((tick() - start) / LOAD_TIME, 0, 1)
-	bar.Size = UDim2.new(progress,0,1,0)
-	text.Text = "Carregando "..math.floor(progress * 100).."%"
-	task.wait()
+	table.insert(tabs, frame)
+	return frame
 end
 
-bar.Size = UDim2.new(1,0,1,0)
-text.Text = "Carregando 100%"
+-- 6 ABAS
+local tab1 = createTab("Player",1)
+local tab2 = createTab("Movement",2)
+local tab3 = createTab("World",3)
+local tab4 = createTab("Visual",4)
+local tab5 = createTab("Fun",5)
+local tab6 = createTab("Settings",6)
 
--- FADE OUT
-TweenService:Create(bg, TweenInfo.new(0.6), {
-	BackgroundTransparency = 1
-}):Play()
+tabs[1].Visible = true
 
-task.wait(0.6)
-gui:Destroy()
+-- BOTÃO SIMPLES
+local function button(parent,text,y,callback)
+	local b = Instance.new("TextButton", parent)
+	b.Size = UDim2.new(0,200,0,40)
+	b.Position = UDim2.new(0,20,0,y)
+	b.Text = text
+	b.BackgroundColor3 = Color3.fromRGB(90,0,140)
+	b.TextColor3 = Color3.new(1,1,1)
+	b.Font = Enum.Font.GothamBold
+	b.TextSize = 14
+	b.MouseButton1Click:Connect(callback)
+end
 
--- AQUI você pode carregar o HUB PRINCIPAL depois
--- loadstring(game:HttpGet("URL_DO_GHOUL_HUB"))()
+-- FLY
+local flying = false
+button(tab2,"Fly",30,function()
+	flying = not flying
+	if flying then
+		local bv = Instance.new("BodyVelocity",hrp)
+		bv.Name = "FlyForce"
+		bv.MaxForce = Vector3.new(1,1,1)*1e5
+		RunService.RenderStepped:Connect(function()
+			if flying then
+				bv.Velocity = workspace.CurrentCamera.CFrame.LookVector * 60
+			end
+		end)
+	else
+		if hrp:FindFirstChild("FlyForce") then
+			hrp.FlyForce:Destroy()
+		end
+	end
+end)
+
+-- NOCLIP
+local noclip = false
+button(tab2,"Noclip",80,function()
+	noclip = not noclip
+	RunService.Stepped:Connect(function()
+		if noclip then
+			for _,p in pairs(char:GetDescendants()) do
+				if p:IsA("BasePart") then
+					p.CanCollide = false
+				end
+			end
+		end
+	end)
+end)
+
+-- EXEMPLOS
+button(tab1,"Reset Character",30,function()
+	char:BreakJoints()
+end)
+
+button(tab6,"Close Hub",30,function()
+	gui:Destroy()
+end)

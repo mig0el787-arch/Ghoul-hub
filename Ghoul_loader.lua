@@ -6,8 +6,8 @@ local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
 
 -- CONFIG
-local IMAGE_ID = "rbxassetid://IMAGEM_AQUI" -- SUA IMAGEM
-local MUSIC_ID = "rbxassetid://MUSICA_HEAVY_LOVE_AQUI" -- Heavy Love (parte famosa)
+local IMAGE_ID = "rbxassetid://13946335235"" -- SUA IMAGEM
+local MUSIC_ID = "rbxassetid://306547398"" -- Heavy Love (parte famosa)
 local LOAD_TIME = 5 -- segundos
 
 -- GUI
@@ -59,7 +59,7 @@ text.TextSize = 18
 
 -- MUSIC
 local sound = Instance.new("Sound", bg)
-sound.SoundId = MUSIC_ID
+sound.SoundId = local MUSIC_ID = "rbxassetid://306547398"
 sound.Volume = 3
 sound.Looped = false
 sound:Play()

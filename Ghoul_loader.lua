@@ -1,184 +1,141 @@
---[[ =========================
-      GHOUL HUB LOADER
-========================= ]]
+--// GHOUL HUB LOADER (PURPLE EDITION)
+--// Executor: Delta / Mobile friendly
 
 local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
+local LocalPlayer = Players.LocalPlayer
 
--- LOADER GUI
-local loaderGui = Instance.new("ScreenGui", player.PlayerGui)
-loaderGui.IgnoreGuiInset = true
-loaderGui.ResetOnSpawn = false
+--================ LOADER ================
+local gui = Instance.new("ScreenGui")
+gui.Parent = game.CoreGui
+gui.IgnoreGuiInset = true
 
-local bg = Instance.new("Frame", loaderGui)
-bg.Size = UDim2.new(1,0,1,0)
-bg.BackgroundColor3 = Color3.fromRGB(0,0,0)
+local loader = Instance.new("Frame", gui)
+loader.Size = UDim2.new(1,0,1,0)
+loader.BackgroundColor3 = Color3.fromRGB(10,10,10)
 
--- BARRA
-local barBg = Instance.new("Frame", bg)
-barBg.Size = UDim2.new(0.5,0,0,10)
-barBg.Position = UDim2.new(0.25,0,0.65,0)
-barBg.BackgroundColor3 = Color3.fromRGB(40,40,40)
-Instance.new("UICorner", barBg).CornerRadius = UDim.new(1,0)
+local title = Instance.new("TextLabel", loader)
+title.Size = UDim2.new(1,0,0.2,0)
+title.Position = UDim2.new(0,0,0.25,0)
+title.BackgroundTransparency = 1
+title.Text = "GHOUL HUB"
+title.TextColor3 = Color3.fromRGB(170,0,255)
+title.Font = Enum.Font.GothamBold
+title.TextScaled = true
 
-local bar = Instance.new("Frame", barBg)
+local barBG = Instance.new("Frame", loader)
+barBG.Size = UDim2.new(0.6,0,0.03,0)
+barBG.Position = UDim2.new(0.2,0,0.55,0)
+barBG.BackgroundColor3 = Color3.fromRGB(40,40,40)
+
+local bar = Instance.new("Frame", barBG)
 bar.Size = UDim2.new(0,0,1,0)
 bar.BackgroundColor3 = Color3.fromRGB(170,0,255)
-Instance.new("UICorner", bar).CornerRadius = UDim.new(1,0)
 
-local percent = Instance.new("TextLabel", bg)
-percent.Position = UDim2.new(0.5,-50,0.7,0)
-percent.Size = UDim2.new(0,100,0,30)
-percent.Text = "0%"
-percent.TextColor3 = Color3.new(1,1,1)
-percent.Font = Enum.Font.GothamBold
-percent.TextSize = 16
+local percent = Instance.new("TextLabel", loader)
+percent.Size = UDim2.new(1,0,0.05,0)
+percent.Position = UDim2.new(0,0,0.6,0)
 percent.BackgroundTransparency = 1
+percent.Text = "Carregando 0%"
+percent.TextColor3 = Color3.fromRGB(255,255,255)
+percent.Font = Enum.Font.Gotham
+percent.TextScaled = true
 
--- MÚSICA (TROCA O ID SE QUISER)
-local sound = Instance.new("Sound", bg)
-sound.SoundId = "rbxassetid://1843529602" -- exemplo
-sound.Volume = 1
-sound:Play()
+--================ SOM CLEAN ================
+local intro = Instance.new("Sound")
+intro.SoundId = "rbxassetid://1843529631" -- clean
+intro.Volume = 0.8
+intro.Parent = SoundService
+intro:Play()
 
--- ANIMAÇÃO
 for i = 1,100 do
 	bar.Size = UDim2.new(i/100,0,1,0)
-	percent.Text = i.."%"
+	percent.Text = "Carregando "..i.."%"
 	task.wait(0.05)
 end
 
-sound:Stop()
-loaderGui:Destroy()
+intro:Stop()
+loader:Destroy()
 
---[[ =========================
-         GHOUL HUB
-========================= ]]
-
-local RunService = game:GetService("RunService")
-local char = player.Character or player.CharacterAdded:Wait()
-local hrp = char:WaitForChild("HumanoidRootPart")
-
-local gui = Instance.new("ScreenGui", player.PlayerGui)
-gui.Name = "GhoulHub"
-gui.ResetOnSpawn = false
-
+--================ HUB ================
 local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0,520,0,330)
-main.Position = UDim2.new(0.5,-260,0.5,-165)
-main.BackgroundColor3 = Color3.fromRGB(10,10,10)
-Instance.new("UICorner", main).CornerRadius = UDim.new(0,14)
+main.Size = UDim2.new(0,420,0,260)
+main.Position = UDim2.new(0.5,-210,0.5,-130)
+main.BackgroundColor3 = Color3.fromRGB(15,15,15)
+main.Visible = true
 
--- TOP
-local top = Instance.new("Frame", main)
-top.Size = UDim2.new(1,0,0,45)
-top.BackgroundColor3 = Color3.fromRGB(120,0,200)
-Instance.new("UICorner", top).CornerRadius = UDim.new(0,14)
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,12)
 
-local title = Instance.new("TextLabel", top)
-title.Size = UDim2.new(1,0,1,0)
-title.Text = "GHOUL HUB"
-title.TextColor3 = Color3.new(1,1,1)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 18
-title.BackgroundTransparency = 1
+local sidebar = Instance.new("Frame", main)
+sidebar.Size = UDim2.new(0,110,1,0)
+sidebar.BackgroundColor3 = Color3.fromRGB(245,245,245)
 
--- SIDEBAR BRANCA
-local side = Instance.new("Frame", main)
-side.Position = UDim2.new(0,0,0,45)
-side.Size = UDim2.new(0,130,1,-45)
-side.BackgroundColor3 = Color3.fromRGB(245,245,245)
-Instance.new("UICorner", side).CornerRadius = UDim.new(0,14)
+Instance.new("UICorner", sidebar).CornerRadius = UDim.new(0,12)
 
-local content = Instance.new("Frame", main)
-content.Position = UDim2.new(0,140,0,55)
-content.Size = UDim2.new(1,-150,1,-65)
-content.BackgroundTransparency = 1
+local header = Instance.new("TextLabel", main)
+header.Size = UDim2.new(1,-110,0,40)
+header.Position = UDim2.new(0,110,0,0)
+header.BackgroundTransparency = 1
+header.Text = "Ghoul Hub"
+header.TextColor3 = Color3.fromRGB(170,0,255)
+header.Font = Enum.Font.GothamBold
+header.TextScaled = true
 
-local tabs = {}
-
-local function createTab(name,y)
-	local b = Instance.new("TextButton", side)
-	b.Size = UDim2.new(1,-10,0,40)
-	b.Position = UDim2.new(0,5,0,y)
-	b.Text = name
-	b.Font = Enum.Font.GothamBold
-	b.TextSize = 14
-	b.TextColor3 = Color3.fromRGB(120,0,200)
-	b.BackgroundColor3 = Color3.fromRGB(255,255,255)
-	Instance.new("UICorner", b).CornerRadius = UDim.new(0,10)
-
-	local f = Instance.new("Frame", content)
-	f.Size = UDim2.new(1,0,1,0)
-	f.Visible = false
-	f.BackgroundTransparency = 1
-
-	b.MouseButton1Click:Connect(function()
-		for _,v in pairs(tabs) do v.Visible = false end
-		f.Visible = true
-	end)
-
-	table.insert(tabs,f)
-	return f
-end
-
-local tab1 = createTab("Player",10)
-local tab2 = createTab("Movement",60)
-local tab3 = createTab("Fun",110)
-local tab4 = createTab("Settings",160)
-
-tabs[1].Visible = true
-
--- BOTÃO
-local function button(parent,text,y,cb)
-	local b = Instance.new("TextButton", parent)
-	b.Size = UDim2.new(0,200,0,40)
-	b.Position = UDim2.new(0,20,0,y)
+--================ FUNÇÕES ================
+local function createBtn(text,y,callback)
+	local b = Instance.new("TextButton", main)
+	b.Size = UDim2.new(0,260,0,40)
+	b.Position = UDim2.new(0,130,0,y)
+	b.BackgroundColor3 = Color3.fromRGB(25,25,25)
+	b.TextColor3 = Color3.fromRGB(255,255,255)
 	b.Text = text
-	b.BackgroundColor3 = Color3.fromRGB(120,0,200)
-	b.TextColor3 = Color3.new(1,1,1)
-	b.Font = Enum.Font.GothamBold
-	b.TextSize = 14
-	Instance.new("UICorner", b).CornerRadius = UDim.new(0,10)
-	b.MouseButton1Click:Connect(cb)
+	b.Font = Enum.Font.Gotham
+	b.TextScaled = true
+	Instance.new("UICorner", b)
+	b.MouseButton1Click:Connect(callback)
 end
 
--- FLY
-local flying = false
-button(tab2,"Fly",20,function()
-	flying = not flying
-	if flying then
-		local bv = Instance.new("BodyVelocity",hrp)
-		bv.Name = "FlyForce"
-		bv.MaxForce = Vector3.new(1,1,1)*1e5
-		RunService.RenderStepped:Connect(function()
-			if flying then
-				bv.Velocity = workspace.CurrentCamera.CFrame.LookVector * 60
-			end
-		end)
-	else
-		if hrp:FindFirstChild("FlyForce") then
-			hrp.FlyForce:Destroy()
-		end
-	end
+-- Fly
+createBtn("Fly",60,function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/Fly.lua"))()
 end)
 
--- NOCLIP
-local noclip = false
-button(tab2,"Noclip",70,function()
-	noclip = not noclip
-	RunService.Stepped:Connect(function()
-		if noclip then
-			for _,p in pairs(char:GetDescendants()) do
-				if p:IsA("BasePart") then
-					p.CanCollide = false
-				end
+-- Noclip
+createBtn("Noclip",110,function()
+	local noclip = true
+	game:GetService("RunService").Stepped:Connect(function()
+		if noclip and LocalPlayer.Character then
+			for _,v in pairs(LocalPlayer.Character:GetDescendants()) do
+				if v:IsA("BasePart") then v.CanCollide = false end
 			end
 		end
 	end)
 end)
 
-button(tab4,"Close Hub",20,function()
-	gui:Destroy()
+-- Free Gamepass (visual)
+createBtn("Free Gamepass",160,function()
+	game.StarterGui:SetCore("SendNotification",{
+		Title="Ghoul Hub",
+		Text="Gamepasses desbloqueados (visual)",
+		Duration=3
+	})
+end)
+
+--================ BOTÃO ON/OFF ================
+local toggle = Instance.new("ImageButton", gui)
+toggle.Size = UDim2.new(0,60,0,60)
+toggle.Position = UDim2.new(0,15,0.5,-30)
+toggle.Image = "rbxassetid://134981298826118"
+toggle.BackgroundColor3 = Color3.fromRGB(15,15,15)
+
+Instance.new("UICorner", toggle).CornerRadius = UDim.new(1,0)
+local stroke = Instance.new("UIStroke", toggle)
+stroke.Color = Color3.fromRGB(170,0,255)
+stroke.Thickness = 2
+
+local open = true
+toggle.MouseButton1Click:Connect(function()
+	open = not open
+	main.Visible = open
 end)
